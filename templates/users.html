@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Teste{% endblock %}
+{% block content %}
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Email</th>
+      <th scope="col">Acoes</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for data in userss %}
+    <tr>
+            <td>{{ data.id }}</td>
+            <td>{{ data.nome }}</td>
+            <td>{{ data.email }}</td>
+            <td><button type="button" class="close" onclick="deleteUser({{ data.id }})">D</button></td>
+            <td><button type="button" class="close" onclick="editUser({{ data.id }})">E</button></td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
