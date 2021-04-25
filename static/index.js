@@ -12,6 +12,6 @@ function editUser(userId){
         method: 'POST',
         body: JSON.stringify({userId: userId}),
     }).then((_res) => {
-        //window.location.href = "/users";
+        window.location.href = "/edit-user";
     });
 }

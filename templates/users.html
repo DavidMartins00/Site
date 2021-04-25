@@ -2,25 +2,40 @@
 {% block title %}Teste{% endblock %}
 {% block content %}
     <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">Nome</th>
-      <th scope="col">Email</th>
-      <th scope="col">Acoes</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for data in userss %}
-    <tr>
-            <td>{{ data.id }}</td>
-            <td>{{ data.nome }}</td>
-            <td>{{ data.email }}</td>
-            <td><button type="button" class="close" onclick="deleteUser({{ data.id }})">D</button></td>
-            <td><button type="button" class="close" onclick="editUser({{ data.id }})">E</button></td>
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Email</th>
+            <th scope="col">Cargo</th>
+            <th scope="col">Acoes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in userss %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.email }}</td>
 
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+                {% if data.role == "Admin"%}
+                    <td>Admin</td>
+                {% endif %}
+                {% if data.role == "Gest"%}
+                    <td>Gestor</td>
+                {% endif %}
+                {% if data.role == "Super"%}
+                    <td>Supervisor</td>
+                {% endif %}
+                {% if data.role == "User"%}
+                    <td>Utilizador</td>
+                {% endif %}
+
+                <td><button type="button" class="close" onclick="deleteUser({{ data.id }})">D</button></td>
+                <td><button type="button" class="close" onclick="editUser({{ data.id }})">E</button></td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

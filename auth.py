@@ -4,7 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from flask_login import login_user, login_required, logout_user, current_user
 
+
 auth = Blueprint('auth', __name__)
+
 
 #Login
 @auth.route('/login', methods=['GET', 'POST'])
@@ -42,6 +44,7 @@ def sign_up():
         nome = request.form.get('nome')
         password = request.form.get('password')
         password2 = request.form.get('password2')
+        role = request.form.get('role')
 
         #Validações
 
@@ -62,11 +65,10 @@ def sign_up():
 
         else:
             #Adicionar user na bd
-            new_user = User(email=email, nome=nome, password=generate_password_hash(password, method='sha256'))
+            new_user = User(email=email, name=nome, role=role, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             flash("Conta criada", category="success")
-            login_user(user, remember=True)
             return redirect(url_for('views.users'))
 
     return render_template("signup.html", user=current_user)
