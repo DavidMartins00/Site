@@ -1,4 +1,5 @@
 from functools import wraps
+from flask import flash, redirect, url_for
 from flask_login import current_user
 
 
@@ -8,7 +9,8 @@ def roles(*roles):
         def wrapped(*args, **kwargs):
             if current_user.role not in roles:
                 # Redirect the user to an unauthorized notice!
-                return "You are not authorized to access this page"
+                flash("Não tem permissão para aceder a esta pagina!", category="error")
+                return redirect(url_for('views.home'))
             return f(*args, **kwargs)
         return wrapped
     return wrapper

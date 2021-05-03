@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Registrar{% endblock %}
 {% block content %}
+    <link href="{{ url_for('static', filename='css.css') }}" rel="stylesheet">
+    <div class="center">
     <form method="POST">
         <h1>Registrar Utilizador</h1>
         <div class="form-group">
@@ -29,6 +31,7 @@
             </select>
         </div>
         <br>
-        <button type="submit">Submeter</button>
+        <button class="btn btn-dark" type="submit">Submeter</button>
     </form>
+    </div>
 {% endblock %}

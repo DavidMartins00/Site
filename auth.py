@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
+from flask_app import db
 from flask_login import login_user, login_required, logout_user, current_user
+from perms import roles
 
 
 auth = Blueprint('auth', __name__)
@@ -37,7 +38,7 @@ def logout():
 
 #Registrar Utilizador
 @auth.route('/register', methods=['GET', 'POST'])
-#@login_required
+@roles("Admin")
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -51,7 +52,7 @@ def sign_up():
         user = User.query.filter_by(email=email).first()
 
         if user:
-            flash("Email ja existe",category="error")
+            flash("Email ja existe", category="error")
         elif len(email) < 4:
             flash("Email requerido", category="error")
         elif len(nome) < 2:

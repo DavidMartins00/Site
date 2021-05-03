@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
-<h1>Dashboard</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="container h-100">
+        <div class="row h-100" style="display: flex; flex-wrap: wrap">
+            <div class="col-4" style="background-color: dimgray;">
+                <div class="d-grid col-3 gap-3 mx-auto">
+                    <br>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">Administrativo
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/users">Cadastro Usuario</a></li>
+                            <li><a class="dropdown-item" href="#">Cadastro Empresa</a></li>
+                            <li><a class="dropdown-item" href="#">Cadastro Produto</a></li>
+                            <li><a class="dropdown-item" href="#">Cadastro Campanha</a></li>
+                            <li><a class="dropdown-item" href="#">Associação</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-primary">Gerente</button>
+                    <button type="button" class="btn btn-primary">Supervisor</button>
+                    <button type="button" class="btn btn-primary">Operador</button>
+                    <button type="button" class="btn btn-primary">Suporte</button>
+                    <button type="button" class="btn btn-success">Pausa</button>
+                    <button type="button" class="btn btn-success">Sair</button>
+                    <button type="button" class="btn btn-danger">Encerrar dia</button>
+                </div>
+                <div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p>{{ user.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p id="date"></p>
+                        </div>
+                        <div class="col">
+                            <p>Tempo logado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid col-8" style="background-color: #f45b69">
+
+        </div>
+    </div>
+    <script>
+        n = new Date();
+        y = n.getFullYear();
+        m = n.getMonth() + 1;
+        d = n.getDate();
+        document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+    </script>
+{% endblock %}

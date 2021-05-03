@@ -1,0 +1,30 @@
+.center {
+margin: auto;
+width: 30%;
+padding: 10px;
+}
+
+.bgo {
+  /* The image used */
+  background-image: url("imagem.jpeg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cc{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+html,body {
+  height: 100%;
+}

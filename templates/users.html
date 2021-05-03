@@ -32,7 +32,7 @@
                 {% endif %}
 
                 <td><button type="button" class="close" onclick="deleteUser({{ data.id }})">D</button></td>
-                <td><button type="button" class="close" onclick="editUser({{ data.id }})">E</button></td>
+               <td> <a href="/user/{{ data.id }}/update">E</a></td>
 
             </tr>
         {% endfor %}

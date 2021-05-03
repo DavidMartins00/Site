@@ -1,14 +1,14 @@
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from flask_login import login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import update
+
 from models import User
 import json
-from app import db, app
-from flask_principal import Principal, Permission, RoleNeed
+from flask_app import db
 from perms import roles
 
 views = Blueprint('views', __name__)
-
-principals = Principal(app)
 
 
 @views.route('/')
@@ -32,6 +32,7 @@ def users():
 
 #Apagar Utilizador
 @views.route('/delete-user', methods=['POST'])
+@roles("Admin")
 def delete_user():
     user = json.loads(request.data)
     userId = user['userId']
@@ -44,38 +45,31 @@ def delete_user():
 
 @views.route('/edit-user', methods=['GET', 'POST'])
 @login_required
+@roles("Admin")
 def edit_user():
     user = json.loads(request.data)
     userId = user['userId']
     user = User.query.get(userId)
     if user:
-        return render_template("usere.html", user=current_user, userr=user)
-    return jsonify({})
+        return render_template("usere.html", userr=user)
 
+
+@views.route('/user/<int:id>/update', methods=['GET', 'POST'])
+def update(id):
+    user = User.query.get_or_404(id)
     if request.method == 'POST':
-        email = request.form.get('email')
-        nome = request.form.get('nome')
-        password = request.form.get('password')
-        #Validações
-
-        user = User.query.filter_by(email=email).first()
-
         if user:
-            flash("Email ja existe",category="error")
-        elif len(email) < 4:
-            flash("Email requerido", category="error")
-        elif len(nome) < 2:
-            flash("Nome requerido", category="error")
+            user.email = request.form.get('email')
+            user.name = request.form.get('nome')
+            if not request.form.get('password') == "":
+                user.password = request.form.get('password')
+            user.role = request.form.get('role')
 
-
-        elif len(password) < 7:
-            flash("Password precisa ser maior que 7 caracters", category="error")
-
-        else:
-            #Adicionar user na bd
-            #edit_user =
-            #db.session.add(edit_user)
-            #db.session.commit()
-            flash("Editar", category="success")
+            db.session.commit()
             return redirect(url_for('views.users'))
+        return f"Employee with id = {id} Does nit exist"
+
+    return render_template('usere.html', userr=user)
+
+
 
