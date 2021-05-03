@@ -2,15 +2,16 @@
 {% block title %}Teste{% endblock %}
 {% block content %}
     <form method="POST" action="/user/{{ userr.id }}/update">
-    <h1>Editar Utilizador</h1>
-    <div class="form-group">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="{{ userr.email }}">
-    </div>
-    <div class="form-group">
-        <label>Nome</label>
-        <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome" value="{{ userr.name }}">
-    </div>
+        <h1>Editar Utilizador</h1>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                   value="{{ userr.email }}">
+        </div>
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome" value="{{ userr.name }}">
+        </div>
         <div class="form-group">
             <label>Password</label>
             <input type="password" class="form-control" name="password" id="password" placeholder="Password">
@@ -18,14 +19,18 @@
         <div class="form-group">
             <label>Role</label>
             <select class="form-select" aria-label="Default select example" name="role" id="role">
-                <option selected hidden value="{{ userr.role }}">{% if userr.role == "Admin"%}<td>Admin</td>{% endif %}{% if userr.role == "Gest"%}<td>Gestor</td>{% endif %}{% if userr.role == "Super"%}<td>Supervisor</td>{% endif %}{% if userr.role == "User"%}<td>Utilizador</td>{% endif %}</option>
+                <option selected hidden value="{{ userr.role }}">{% if userr.role == "Admin" %}
+                    <td>Admin</td>{% endif %}{% if userr.role == "Gest" %}
+                    <td>Gestor</td>{% endif %}{% if userr.role == "Super" %}
+                    <td>Supervisor</td>{% endif %}{% if userr.role == "User" %}
+                    <td>Utilizador</td>{% endif %}</option>
                 <option value="User">Utilizador</option>
                 <option value="Admin">Admin</option>
                 <option value="Gest">Gestor</option>
                 <option value="Super">Supervisor</option>
             </select>
         </div>
-    <br>
-    <button type="submit">Submeter</button>
-</form>
+        <br>
+        <button type="submit">Submeter</button>
+    </form>
 {% endblock %}

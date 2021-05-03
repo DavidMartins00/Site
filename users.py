@@ -12,7 +12,6 @@ user = Blueprint('users', __name__)
 @login_required
 @roles('Admin')
 def users():
-
     return render_template("users.html", user=current_user, userss=User.query.all())
 
 

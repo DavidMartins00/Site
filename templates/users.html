@@ -18,22 +18,21 @@
                 <td>{{ data.name }}</td>
                 <td>{{ data.email }}</td>
 
-                {% if data.role == "Admin"%}
+                {% if data.role == "Admin" %}
                     <td>Admin</td>
                 {% endif %}
-                {% if data.role == "Gest"%}
+                {% if data.role == "Gest" %}
                     <td>Gestor</td>
                 {% endif %}
-                {% if data.role == "Super"%}
+                {% if data.role == "Super" %}
                     <td>Supervisor</td>
                 {% endif %}
-                {% if data.role == "User"%}
+                {% if data.role == "User" %}
                     <td>Utilizador</td>
                 {% endif %}
 
-{#                <td><button type="button" class="close" onclick="deleteUser({{ data.id }})">D</button></td>#}
-                <td> <a href="/user/{{ data.id }}/delete">D</a></td>
-               <td> <a href="/user/{{ data.id }}/update">E</a></td>
+                <td><a href="/user/{{ data.id }}/delete">D</a></td>
+                <td><a href="/user/{{ data.id }}/update">E</a></td>
 
             </tr>
         {% endfor %}
