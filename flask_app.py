@@ -14,10 +14,17 @@ db.init_app(app)
 from views import views
 from auth import auth
 from users import user
+from produtos import produto
+from empresas import empresa
+from campanhas import campanha
 
 app.register_blueprint(views, url_prefix='/')
 app.register_blueprint(auth, url_prefix='/')
 app.register_blueprint(user, url_prefix='/')
+app.register_blueprint(produto, url_prefix='/')
+app.register_blueprint(empresa, url_prefix='/')
+app.register_blueprint(campanha, url_prefix='/')
+
 
 from models import User
 
@@ -30,6 +37,8 @@ if not path.exists('site/' + DB_NAME):
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
+login_manager.login_message = "Por favor, faça login para acessar a esta pagina."
+login_manager.login_message_category = "error"
 
 
 @login_manager.user_loader

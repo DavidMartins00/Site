@@ -43,6 +43,6 @@ def update(id):
 
             db.session.commit()
             return redirect(url_for('users.users'))
-        return f"Employee with id = {id} Does nit exist"
+        flash("Utilizador não existe", "error")
 
     return render_template('usere.html', userr=user)

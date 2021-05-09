@@ -14,3 +14,5 @@ def roles(*roles):
             return f(*args, **kwargs)
         return wrapped
     return wrapper
+
+# Admin>Gerente>Supervisor>Operador

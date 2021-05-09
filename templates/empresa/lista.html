@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Empresas{% endblock %}
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in empresa %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.nome }}</td>
+                <td>{{ data.tipo }}</td>
+                <td><a class="btn btn-danger" href="/empresa/{{ data.id }}/delete">Apagar</a>
+                    <a class="btn btn-warning" href="/empresa/{{ data.id }}/update">Editar</a></td>
+            </tr>
+        {% endfor %}
+        <td><a href="/dashboard" class="btn btn-success">Voltar</a></td>
+        <td><a href="/addempresa" class="btn btn-success">Adicionar</a></td>
+
+        </tbody>
+    </table>
+{% endblock %}

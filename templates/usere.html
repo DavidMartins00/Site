@@ -17,6 +17,14 @@
             <input type="password" class="form-control" name="password" id="password" placeholder="Password">
         </div>
         <div class="form-group">
+            <label>Nif</label>
+            <input type="text" class="form-control" name="nif" id="nif" placeholder="Nif">
+        </div>
+        <div class="form-group">
+            <label>Telemovel</label>
+            <input type="text" class="form-control" name="tel" id="tel" placeholder="Telemovel">
+        </div>
+        <div class="form-group">
             <label>Role</label>
             <select class="form-select" aria-label="Default select example" name="role" id="role">
                 <option selected hidden value="{{ userr.role }}">{% if userr.role == "Admin" %}

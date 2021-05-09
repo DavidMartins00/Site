@@ -5,11 +5,10 @@ from flask_app import db
 from flask_login import login_user, login_required, logout_user, current_user
 from perms import roles
 
-
 auth = Blueprint('auth', __name__)
 
 
-#Login
+# Login
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -28,7 +27,8 @@ def login():
             flash("Credenciais erradas", category="error")
     return render_template("login.html", user=current_user)
 
-#Logout
+
+# Logout
 @auth.route('/logout')
 @login_required
 def logout():
@@ -36,18 +36,21 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-#Registrar Utilizador
+# Registrar Utilizador
 @auth.route('/register', methods=['GET', 'POST'])
 @roles("Admin")
 def sign_up():
     if request.method == 'POST':
+        # Ir buscar dados ao html
         email = request.form.get('email')
         nome = request.form.get('nome')
         password = request.form.get('password')
         password2 = request.form.get('password2')
         role = request.form.get('role')
+        tel = request.form.get('tel')
+        nif = request.form.get('nif')
 
-        #Validações
+        # Validações
 
         user = User.query.filter_by(email=email).first()
 
@@ -65,8 +68,9 @@ def sign_up():
             flash("Password precisa ser maior que 7 caracters", category="error")
 
         else:
-            #Adicionar user na bd
-            new_user = User(email=email, name=nome, role=role, password=generate_password_hash(password, method='sha256'))
+            # Adicionar user na bd
+            new_user = User(email=email, name=nome, role=role, nif=nif, tel=tel,
+                            password=generate_password_hash(password, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             flash("Conta criada", category="success")

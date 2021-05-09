@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Teste{% endblock %}
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Foto</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in produto %}
+            <tr>
+                <td>{{ data.id }}</td>
+                {% for emp in empresa %}
+                    {% if emp.id == data.empresa %}
+                        <td>{{ emp.nome }}</td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ data.nome }}</td>
+                <td>{{ data.valor }}</td>
+                <td>{{ data.descr }}</td>
+                <td>{{ data.foto }}</td>
+
+                <td><a class="btn btn-danger" href="/produto/{{ data.id }}/delete">Apagar</a>
+                    <a class="btn btn-warning" href="/produto/{{ data.id }}/update">Editar</a></td>
+            </tr>
+        {% endfor %}
+        <td><a href="/dashboard" class="btn btn-success">Voltar</a></td>
+        <td><a href="/addproduto" class="btn btn-dark">Adicionar</a></td>
+        </tbody>
+    </table>
+{% endblock %}

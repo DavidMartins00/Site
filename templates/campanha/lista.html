@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Teste{% endblock %}
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Produto</th>
+            <th scope="col">Campanha</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Ofertas</th>
+            <th scope="col">Condições</th>
+            <th scope="col">Fotos</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in campanha %}
+            <tr>
+                <td>{{ data.id }}</td>
+                {% for emp in empresa %}
+                    {% if emp.id == data.empresa %}
+                        <td>{{ emp.nome }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% for pro in produto %}
+                    {% if pro.id == data.produto %}
+                        <td>{{ pro.nome }}</td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ data.campanha }}</td>
+                <td>{{ data.valorcamp }}</td>
+                <td>{{ data.descr }}</td>
+                <td>{{ data.ofertas }}</td>
+                <td>{{ data.condicoes }}</td>
+                <td>{{ data.fotos }}</td>
+
+                <td><a class="btn btn-danger" href="/campanha/{{ data.id }}/delete">Apagar</a>
+                    <a class="btn btn-warning" href="/campanha/{{ data.id }}/update">Editar</a></td>
+
+            </tr>
+        {% endfor %}
+        <td><a href="/dashboard" class="btn btn-success">Voltar</a></td>
+        <td><a href="/addcampanha" class="btn btn-success">Adicionar</a></td>
+        </tbody>
+    </table>
+{% endblock %}

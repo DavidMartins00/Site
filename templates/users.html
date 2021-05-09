@@ -7,8 +7,10 @@
             <th scope="col">id</th>
             <th scope="col">Nome</th>
             <th scope="col">Email</th>
+            <th scope="col">NIF</th>
+            <th scope="col">Tel</th>
             <th scope="col">Cargo</th>
-            <th scope="col">Acoes</th>
+            <th scope="col">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +19,8 @@
                 <td>{{ data.id }}</td>
                 <td>{{ data.name }}</td>
                 <td>{{ data.email }}</td>
+                <td>{{ data.nif }}</td>
+                <td>{{ data.tel }}</td>
 
                 {% if data.role == "Admin" %}
                     <td>Admin</td>
@@ -31,11 +35,13 @@
                     <td>Utilizador</td>
                 {% endif %}
 
-                <td><a href="/user/{{ data.id }}/delete">D</a></td>
-                <td><a href="/user/{{ data.id }}/update">E</a></td>
+                <td><a class="btn btn-danger" href="/user/{{ data.id }}/delete">Apagar</a>
+                    <a class="btn btn-warning" href="/user/{{ data.id }}/update">Editar</a></td>
 
             </tr>
         {% endfor %}
+        <td><a href="/dashboard" class="btn btn-success">Voltar</a></td>
+        <td><a href="/register" class="btn btn-dark">Adicionar</a></td>
         </tbody>
     </table>
 {% endblock %}

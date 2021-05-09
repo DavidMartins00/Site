@@ -12,9 +12,9 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/users">Cadastro Usuario</a></li>
-                            <li><a class="dropdown-item" href="#">Cadastro Empresa</a></li>
-                            <li><a class="dropdown-item" href="#">Cadastro Produto</a></li>
-                            <li><a class="dropdown-item" href="#">Cadastro Campanha</a></li>
+                            <li><a class="dropdown-item" href="/empresas">Cadastro Empresa</a></li>
+                            <li><a class="dropdown-item" href="/produtos">Cadastro Produto</a></li>
+                            <li><a class="dropdown-item" href="/campanhas">Cadastro Campanha</a></li>
                             <li><a class="dropdown-item" href="#">Associação</a></li>
                         </ul>
                     </div>
@@ -33,7 +33,8 @@
                             <p>{{ user.name }}</p>
                         </div>
                         <div class="col">
-                            <p id="date"></p>
+                            <p id="date">Data</p>
+                            <p id="clock">Horas</p>
                         </div>
                         <div class="col">
                             <p>Tempo logado</p>
@@ -42,16 +43,42 @@
                 </div>
             </div>
 
-        <div class="container-fluid col-8" style="background-color: #f45b69">
-          <p></p>
-        </div>
+            <div class="container-fluid col-8">
+                <img class="logo" style="max-width:50%;height: auto" src="{{ url_for('static', filename='logo.png') }}"
+                     alt="">
             </div>
+        </div>
     </div>
     <script>
+
         n = new Date();
         y = n.getFullYear();
         m = n.getMonth() + 1;
         d = n.getDate();
         document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+
+        var clockElement = document.getElementById("clock");
+
+        function updateClock(clock) {
+            clock.innerHTML = new Date().toLocaleTimeString();
+        }
+
+        setInterval(function () {
+            updateClock(clockElement);
+        }, 1000);
+
+        (function () {
+
+            var clockElement = document.getElementById("clock");
+
+            function updateClock(clock) {
+                clock.innerHTML = new Date().toLocaleTimeString();
+            }
+
+            setInterval(function () {
+                updateClock(clockElement);
+            }, 1000);
+
+        }());
     </script>
 {% endblock %}

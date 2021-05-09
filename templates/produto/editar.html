@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Registrar{% endblock %}
+{% block content %}
+    <div class="center">
+        <form method="POST">
+            <h1>Registrar Produto</h1>
+            <div class="form-group">
+                <label>Empresa</label>
+                <select class="form-select" aria-label="Default select example" name="empresa" id="empresa">
+                    {% for data in empresa %}
+                        <option value="{{ data.id }}">{{ data.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome"
+                       value="{{ data.nome }}">
+            </div>
+            <div class="form-group">
+                <label>Valor</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control valor" name="valor" id="valor" placeholder="Valor"
+                           value="{{ data.valor }}">
+                    <div class="input-group-append">
+                        <span class="input-group-text">€</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Foto</label>
+                <input type="text" class="form-control" name="foto" id="foto" placeholder="Foto"
+                       value="{{ data.foto }}">
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea class="form-control" id="descr" name="descr"
+                          placeholder="Descrição">{{ data.descr }}</textarea>
+            </div>
+            <br>
+            <button class="btn btn-dark" type="submit">Submeter</button>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.valor').mask('#.00', {reverse: true});
+        });
+    </script>
+{% endblock %}
