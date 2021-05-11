@@ -35,7 +35,25 @@
                 <td>{{ data.descr }}</td>
                 <td>{{ data.ofertas }}</td>
                 <td>{{ data.condicoes }}</td>
-                <td>{{ data.fotos }}</td>
+                <td>
+                    <div id="carousel" style="width: 60px; height: auto;" data-bs-pause="false" class="carousel slide"
+                         data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="../../static/uploads/{{ data.fotos }}/1.jpg"
+                                     class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="../../static/uploads/{{ data.fotos }}/2.jpg"
+                                     class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="../../static/uploads/{{ data.fotos }}/3.jpg"
+                                     class="d-block w-100" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </td>
 
                 <td><a class="btn btn-danger" href="/campanha/{{ data.id }}/delete">Apagar</a>
                     <a class="btn btn-warning" href="/campanha/{{ data.id }}/update">Editar</a></td>

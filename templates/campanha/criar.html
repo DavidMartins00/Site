@@ -2,7 +2,7 @@
 {% block title %}Registrar{% endblock %}
 {% block content %}
     <div class="center">
-        <form method="POST">
+        <form method="POST" enctype=multipart/form-data>
             <h1>Registrar Campanha</h1>
             <div class="form-group">
                 <label>Empresa</label>
@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <label>Fotos</label>
-                <input type="text" class="form-control" name="fotos" id="fotos" placeholder="Fotos">
+                <input type="file" class="form-control" multiple name="files[]" id="files[]" placeholder="Foto">
             </div>
             <div class="form-group">
                 <label>Descrição</label>
@@ -57,6 +57,15 @@
     <script>
         $(document).ready(function () {
             $('.valor').mask('#.00', {reverse: true});
+        });
+
+        $(function () {
+            $("input[type='submit']").click(function () {
+                var $fileUpload = $("input[type='file']");
+                if (parseInt($fileUpload.get(0).files.length) > 3) {
+                    alert("Só pode inserir 3 imagens");
+                }
+            });
         });
     </script>
 {% endblock %}

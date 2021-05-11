@@ -1,11 +1,18 @@
+import os
+import random
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
 from models import Campanha, Produto, Empresa
-from flask_app import db
+from flask_app import db, app
 from perms import roles
 
 campanha = Blueprint('campanha', __name__)
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Adicionar Produto
 @campanha.route('/addcampanha', methods=['GET', 'POST'])
@@ -23,9 +30,29 @@ def criar():
         ofertas = request.form.get('ofertas')
         fotos = request.form.get('fotos')
 
+        # FOTO
+        foto = str(random.randrange(1, 9223372036854775807))
+
+        if 'files[]' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        files = request.files.getlist('files[]')
+        fol = app.config['UPLOAD_FOLDER']
+
+        fol += "/" + foto
+        os.mkdir(fol)
+        temp = 1
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = str(temp) + "." + "jpg"
+                temp += 1
+                file.save(os.path.join(fol, filename))
+            # -----Foto------
+
         # Adicionar na bd
         campanha = Campanha(empresa=empresa, produto=produto, campanha=campanha, valorcamp=valorcamp, descr=descr,
-                            condicoes=condicoes, ofertas=ofertas, fotos=fotos)
+                            condicoes=condicoes, ofertas=ofertas, fotos=foto)
         db.session.add(campanha)
         db.session.commit()
         flash("Campanha adicionado", category="success")
@@ -70,7 +97,25 @@ def update(id):
             campanha.descr = request.form.get('descr')
             campanha.condicoes = request.form.get('condicoes')
             campanha.ofertas = request.form.get('ofertas')
-            campanha.fotos = request.form.get('fotos')
+            if not request.form.get('foto') == "":
+                foto = str(random.randrange(1, 9223372036854775807))
+
+                if 'files[]' not in request.files:
+                    flash('No file part')
+                    return redirect(request.url)
+
+                files = request.files.getlist('files[]')
+                fol = app.config['UPLOAD_FOLDER']
+
+                fol += "/" + foto
+                os.mkdir(fol)
+                temp = 1
+                for file in files:
+                    if file and allowed_file(file.filename):
+                        filename = str(temp) + "." + "jpg"
+                        temp += 1
+                        file.save(os.path.join(fol, filename))
+                        campanha.fotos = foto
 
             db.session.commit()
             return redirect(url_for('campanha.lista'))

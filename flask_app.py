@@ -2,14 +2,18 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from os.path import join, dirname, realpath
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'static/uploads/')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'NSKCSDdas'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 db.init_app(app)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 from views import views
 from auth import auth
@@ -25,13 +29,11 @@ app.register_blueprint(produto, url_prefix='/')
 app.register_blueprint(empresa, url_prefix='/')
 app.register_blueprint(campanha, url_prefix='/')
 
-
 from models import User
 
 # Criar base de dados
 if not path.exists('site/' + DB_NAME):
     db.create_all(app=app)
-    print("Base de dados criada")
 
 # Login Manager
 login_manager = LoginManager()
