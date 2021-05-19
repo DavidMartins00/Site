@@ -3,7 +3,7 @@ import random
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
 from models import Campanha, Produto, Empresa
-from app import db, app
+from flask_app import db, app
 from perms import roles
 
 campanha = Blueprint('campanha', __name__)

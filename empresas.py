@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
 from models import Empresa
-from app import db
+from flask_app import db
 from perms import roles
 
 empresa = Blueprint('empresa', __name__)

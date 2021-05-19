@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_from_directory
 from flask_login import login_required
 from models import Produto, Empresa, Campanha
-from app import db
+from flask_app import db
 from perms import roles
 import os
 import random
-from app import app
+from flask_app import app
 
 produto = Blueprint('produto', __name__)
 
