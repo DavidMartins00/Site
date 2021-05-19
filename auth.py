@@ -38,7 +38,7 @@ def logout():
 
 # Registrar Utilizador
 @auth.route('/register', methods=['GET', 'POST'])
-@roles("Admin")
+#@roles("Admin")
 def sign_up():
     if request.method == 'POST':
         # Ir buscar dados ao html
@@ -49,6 +49,7 @@ def sign_up():
         role = request.form.get('role')
         tel = request.form.get('tel')
         nif = request.form.get('nif')
+        tipo = request.form.get('tipo')
 
         # Validações
 
@@ -70,10 +71,10 @@ def sign_up():
         else:
             # Adicionar user na bd
             new_user = User(email=email, name=nome, role=role, nif=nif, tel=tel,
-                            password=generate_password_hash(password, method='sha256'))
+                            password=generate_password_hash(password, method='sha256'),tipo=tipo)
             db.session.add(new_user)
             db.session.commit()
             flash("Conta criada", category="success")
-            return redirect(url_for('views.users'))
+            return redirect(url_for('users.users'))
 
     return render_template("signup.html", user=current_user)

@@ -10,6 +10,8 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(150))
     nif = db.Column(db.Integer(), nullable=True)
     tel = db.Column(db.Integer(), nullable=True)
+    tempo = db.Column(db.Integer(), default=0)
+    tipo = db.Column(db.Integer(), default=0)
 
 
 class Produto(db.Model):
@@ -44,6 +46,9 @@ class Campanha(db.Model):
 
 class Movim(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(150))
+    email = db.Column(db.String(150))
+    tele = db.Column(db.Integer)
 
 
 class Log(db.Model):

@@ -10,6 +10,7 @@
             <th scope="col">NIF</th>
             <th scope="col">Tel</th>
             <th scope="col">Cargo</th>
+            <th scope="col">Horas</th>
             <th scope="col">Ações</th>
         </tr>
         </thead>
@@ -35,6 +36,7 @@
                     <td>Utilizador</td>
                 {% endif %}
 
+                <td>{{ data.tipo }}</td>
                 <td><a class="btn btn-danger" href="/user/{{ data.id }}/delete">Apagar</a>
                     <a class="btn btn-warning" href="/user/{{ data.id }}/update">Editar</a></td>
 

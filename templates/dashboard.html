@@ -18,13 +18,13 @@
                             <li><a class="dropdown-item" href="#">Associação</a></li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-primary">Gerente</button>
-                    <button type="button" class="btn btn-primary">Supervisor</button>
-                    <button type="button" class="btn btn-primary">Operador</button>
+                    <button disabled type="button" class="btn btn-primary">Gerente</button>
+                    <button disabled type="button" class="btn btn-primary">Supervisor</button>
+                    <button  type="button" class="btn btn-primary">Movimentação</button>
                     <button type="button" class="btn btn-primary">Suporte</button>
-                    <button type="button" class="btn btn-success">Pausa</button>
+                    <button type="button" onclick="chronoStop()" class="btn btn-success">Pausa</button>
                     <button type="button" class="btn btn-success">Sair</button>
-                    <button type="button" class="btn btn-danger">Encerrar dia</button>
+                    <a href="/logout" class="btn btn-danger">Encerrar dia</a>
                 </div>
                 <div>
                     <hr>
@@ -37,7 +37,7 @@
                             <p id="clock">Horas</p>
                         </div>
                         <div class="col">
-                            <p>Tempo logado</p>
+                            <p id="tmplog">Tempo logado</p>
                         </div>
                     </div>
                 </div>

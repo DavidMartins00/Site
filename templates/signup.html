@@ -2,43 +2,64 @@
 {% block title %}Registrar{% endblock %}
 {% block content %}
     <div class="center">
-    <form method="POST">
-        <h1>Registrar Utilizador</h1>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-        </div>
-        <div class="form-group">
-            <label>Nome</label>
-            <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <label>Confirmar Password</label>
-            <input type="password" class="form-control" name="password2" id="password2" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <label>Nif</label>
-            <input type="text" class="form-control" name="nif" id="nif" placeholder="Nif">
-        </div>
-        <div class="form-group">
-            <label>Telemovel</label>
-            <input type="text" class="form-control" name="tel" id="tel" placeholder="Telemovel">
-        </div>
-        <div class="form-group">
-            <label>Role</label>
-            <select class="form-select" aria-label="Default select example" name="role" id="role">
-                <option selected value="User">Utilizador</option>
-                <option value="Admin">Admin</option>
-                <option value="Gest">Gestor</option>
-                <option value="Super">Supervisor</option>
-            </select>
-        </div>
-        <br>
-        <button class="btn btn-dark" type="submit">Submeter</button>
-    </form>
+        <form method="POST">
+            <h1>Registrar Utilizador</h1>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label>Confirmar Password</label>
+                <input type="password" class="form-control" name="password2" id="password2" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label>Nif</label>
+                <input type="text" class="form-control" name="nif" id="nif" placeholder="Nif">
+            </div>
+            <div class="form-group">
+                <label>Telemovel</label>
+                <input type="text" class="form-control" name="tel" id="tel" placeholder="Telemovel">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select class="form-select" aria-label="Default select example" name="role" id="role">
+                    <option selected value="User">Utilizador</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Gest">Gestor</option>
+                    <option value="Super">Supervisor</option>
+                </select>
+            </div>
+            <div id="tipod" class="form-group">
+                <label>Tipo</label>
+                <select class="form-select" aria-label="Default select example" name="tipo" id="tipo">
+                    <option value="44">Funcionario</option>
+                    <option value="0">Parceiro</option>
+                    <option value="44">Full Time</option>
+                    <option value="22">Part Time</option>
+                    <option selected value="0">Freelancer</option>
+                </select>
+            </div>
+            <br>
+            <button class="btn btn-dark" type="submit">Submeter</button>
+        </form>
     </div>
+    <script>
+        $("#role").change(function () {
+            if ($(this).val() == "User") {
+                $("#tipod").show();
+
+            } else {
+                $("#tipod").hide();
+            }
+
+        });
+    </script>
 {% endblock %}
