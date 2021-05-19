@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required, current_user
 from models import Movim
-from flask_app import db
+from app import db
 from perms import roles
 from io import TextIOWrapper
 import csv
