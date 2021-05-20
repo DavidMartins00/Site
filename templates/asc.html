@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Movimentação{% endblock %}
+{% block title %}Associação{% endblock %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
 
@@ -57,7 +57,7 @@
                                         <td>{{ data.nome }}</td>
                                         <td>{{ data.email }}</td>
                                         <td>{{ data.tele }}</td>
-                                        <td><a class="btn btn-warning" href="/mov/{{ data.id }}/update">Editar</a></td>
+                                        <td><a class="btn btn-warning" href="/asc/{{ data.id }}/update">Editar</a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
