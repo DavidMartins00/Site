@@ -30,6 +30,7 @@
         <hr>
         <div style="text-align: center">
             <button id="import" class="btn btn-danger">Importar</button>
+            <button id="lr" class="btn btn-danger">Lista de erros</button>
         </div>
 
         <hr>
@@ -68,7 +69,6 @@
             </div>
         </div>
     </div>
-    </div>
 
     {# Modal Importar #}
     <div id="upload" class="modal">
@@ -82,33 +82,76 @@
                     <div class="form-group">
                         <label>Ficheiro</label>
                         <input type="file" class="form-control" name="file" id="file"
-                               placeholder="Ficheiro">
+                               placeholder="Ficheiro" accept=".csv">
                     </div>
                     <br>
                     <button class="btn btn-dark" type="submit">Submeter</button>
                 </form>
             </div>
         </div>
+    </div>
+    {# Modal Tabela #}
+    <div id="mtabela" class="modal">
 
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="eclose">&times;</span>
+
+            <table id="etabela"
+                   class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for data in er %}
+                    <tr>
+                        <td>{{ data.id }}</td>
+                        <td>{{ data.nome }}</td>
+                        <td>{{ data.email }}</td>
+                        <td>{{ data.tele }}</td>
+                        <td><a class="btn btn-warning"
+                               href="/asc/{{ data.id }}/update">Editar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     <script>
         // Get the modal
         var mimportar = document.getElementById("upload");
+        var tabela = document.getElementById("mtabela");
 
         // Get the button that opens the modal
         var btn = document.getElementById("import");
+        var ebtn = document.getElementById("lr");
 
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
+        var espan = document.getElementsByClassName("eclose")[0];
 
         // When the user clicks on the button, open the modal
         btn.onclick = function () {
             mimportar.style.display = "block";
         }
+        ebtn.onclick = function () {
+            tabela.style.display = "block";
+        }
+
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             mimportar.style.display = "none";
+        }
+        espan.onclick = function () {
+            tabela.style.display = "none";
         }
 
         // When the user clicks anywhere outside of the modal, close it
@@ -117,9 +160,21 @@
                 mimportar.style.display = "none";
             }
         }
+        window.onclick = function (event) {
+            if (event.target == tabela) {
+                tabela.style.display = "none";
+            }
+        }
 
         $(document).ready(function () {
             $('#tabela').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#etabela').DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
                 }

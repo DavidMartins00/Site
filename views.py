@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required, current_user
-from models import Movim
+from models import Movim, Easc
 from flask_app import db
 from perms import roles
-from io import TextIOWrapper
-import csv
+import pandas as pd
 
 views = Blueprint('views', __name__)
 
@@ -17,7 +16,7 @@ def dashboard():
 
 
 @views.route('/associacao', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def associacao():
     if request.method == 'POST':
         # Ir buscar dados ao html
@@ -32,27 +31,37 @@ def associacao():
         flash("Associação Adicionada", category="success")
         return redirect(url_for('views.associacao'))
 
-    return render_template("asc.html", movi=Movim.query.all())
+    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all())
 
 
 @views.route('/uploadcsv', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def uploadcsv():
     if request.method == 'POST':
-        csv_file = request.files['file']
-        csv_file = TextIOWrapper(csv_file, encoding='utf-8')
-        csv_reader = csv.reader(csv_file)
-        for row in csv_reader:
-            lin = Movim(nome=row[0], email=row[1], tele=row[2])
-            db.session.add(lin)
-            db.session.commit()
+        file = request.files['file']
+        # CVS Column Names
+        col_names = ['nome', 'email', 'telefone']
+        # Use Pandas to parse the CSV file
+        csvData = pd.read_csv(file, names=col_names, header=None, decimal=",", keep_default_na=False)
+        # Loop through the Rows
+        for i, row in csvData.iterrows():
+            if row[2] == "email" or row[2] == "Email" or row[2] == "EMAIL":
+                pass
+            elif row[0] == "" or row[1] == "" or row[2] == "":
+                elin = Easc(nome=row[0], email=row[2], tele=row[1])
+                db.session.add(elin)
+                db.session.commit()
+            else:
+                lin = Movim(nome=row[0], email=row[2], tele=row[1])
+                db.session.add(lin)
+                db.session.commit()
         return redirect(url_for('views.associacao'))
     else:
         flash("Erro no ficheiro", "error")
 
 
 @views.route('/asc/<int:id>/update', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def update(id):
     mov = Movim.query.get_or_404(id)
     if request.method == 'POST':

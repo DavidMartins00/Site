@@ -51,5 +51,12 @@ class Movim(db.Model):
     tele = db.Column(db.Integer)
 
 
+class Easc(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(150), nullable=True)
+    email = db.Column(db.String(150), nullable=True)
+    tele = db.Column(db.Integer, nullable=True)
+
+
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
