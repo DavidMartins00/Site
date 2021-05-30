@@ -75,3 +75,24 @@ def update(id):
         flash("Dados não existem", "error")
 
     return render_template('easc.html', data=mov)
+
+
+@views.route('/easc/<int:id>/update', methods=['GET', 'POST'])
+# @login_required
+def eupdate(id):
+    emov = Easc.query.get_or_404(id)
+    if request.method == 'POST':
+        if emov:
+            nome = request.form.get('nome')
+            email = request.form.get('email')
+            tele = request.form.get('tele')
+            if nome != "" and email != "" and tele != "":
+                # Adicionar na bd
+                mov = Movim(nome=nome, email=email, tele=tele)
+                db.session.add(mov)
+                db.session.delete(emov)
+                db.session.commit()
+
+        return redirect(url_for('views.associacao'))
+    flash("Dados não existem", "error")
+    return render_template('easc.html', data=emov)

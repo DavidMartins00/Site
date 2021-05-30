@@ -85,11 +85,15 @@
                                placeholder="Ficheiro" accept=".csv">
                     </div>
                     <br>
-                    <button class="btn btn-dark" type="submit">Submeter</button>
+                    <button class="btn btn-dark" id="but" type="submit">
+                        Submeter
+                    </button>
                 </form>
+                <div id="spin" style="display: none" class="spinner-border text-info"></div>
             </div>
         </div>
     </div>
+
     {# Modal Tabela #}
     <div id="mtabela" class="modal">
 
@@ -116,7 +120,7 @@
                         <td>{{ data.email }}</td>
                         <td>{{ data.tele }}</td>
                         <td><a class="btn btn-warning"
-                               href="/asc/{{ data.id }}/update">Editar</a>
+                               href="/easc/{{ data.id }}/update">Editar</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -125,9 +129,11 @@
         </div>
     </div>
     <script>
+
+
         // Get the modal
-        var mimportar = document.getElementById("upload");
         var tabela = document.getElementById("mtabela");
+        var mimportar = document.getElementById("upload");
 
         // Get the button that opens the modal
         var btn = document.getElementById("import");
@@ -144,7 +150,6 @@
         ebtn.onclick = function () {
             tabela.style.display = "block";
         }
-
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
@@ -180,6 +185,12 @@
                 }
             });
         });
+
+        var spin = document.getElementById("spin");
+        var but = document.getElementById("but");
+        but.onclick = function () {
+            spin.style.display = "block";
+        }
 
     </script>
 

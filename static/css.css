@@ -18,11 +18,9 @@
 }
 
 .cc {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 html, body {
@@ -139,3 +137,4 @@ input[type=number] {
   text-decoration: none;
   cursor: pointer;
 }
+
