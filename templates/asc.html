@@ -35,13 +35,13 @@
 
         <hr>
 
-
+        {% set count = 0 %}
         <div class="row py-5">
             <div class="col-lg-10 mx-auto">
                 <div class="card rounded shadow border-0">
                     <div class="card-body p-5 bg-white rounded">
                         <div class="table-responsive">
-                            <table id="tabela" style="width:100%" class="table table-striped table-bordered">
+                            <table id="tabela" style="twidth:100%" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th>Id</th>
@@ -53,6 +53,7 @@
                                 </thead>
                                 <tbody>
                                 {% for data in movi %}
+                                    {% set count = count + 1 %}
                                     <tr>
                                         <td>{{ data.id }}</td>
                                         <td>{{ data.nome }}</td>
@@ -128,8 +129,18 @@
             </table>
         </div>
     </div>
-    <script>
 
+    <div style=" position: fixed;
+    bottom: 0;
+    right: 0;">
+        <p>Registros importados: {{ cnt }}</p>
+        <br>
+        <p id="tt">Total registros importados</p>
+        <br>
+        <p id="ett">Total registros falhados: {{ ecnt }}</p>
+    </div>
+
+    <script>
 
         // Get the modal
         var tabela = document.getElementById("mtabela");
@@ -177,20 +188,26 @@
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
                 }
             });
+            document.getElementById('tt').innerText = "Total registros importados: " + $('#tabela').DataTable().rows().count();
         });
+
         $(document).ready(function () {
             $('#etabela').DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
                 }
             });
+            document.getElementById('ett').innerText = "Total registros falhados: " + $('#etabela').DataTable().rows().count();
+
         });
+
 
         var spin = document.getElementById("spin");
         var but = document.getElementById("but");
         but.onclick = function () {
             spin.style.display = "block";
         }
+
 
     </script>
 

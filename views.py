@@ -7,6 +7,9 @@ import pandas as pd
 
 views = Blueprint('views', __name__)
 
+ecount =0
+count = 0
+
 
 @views.route('/')
 @views.route('/dashboard')
@@ -30,13 +33,13 @@ def associacao():
         db.session.commit()
         flash("Associação Adicionada", category="success")
         return redirect(url_for('views.associacao'))
-
-    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all())
+    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount)
 
 
 @views.route('/uploadcsv', methods=['GET', 'POST'])
 # @login_required
 def uploadcsv():
+    global count,ecount
     if request.method == 'POST':
         file = request.files['file']
         # CVS Column Names
@@ -48,10 +51,12 @@ def uploadcsv():
             if row[2] == "email" or row[2] == "Email" or row[2] == "EMAIL":
                 pass
             elif row[0] == "" or row[1] == "" or row[2] == "":
+                ecount += 1
                 elin = Easc(nome=row[0], email=row[2], tele=row[1])
                 db.session.add(elin)
                 db.session.commit()
             else:
+                count += 1
                 lin = Movim(nome=row[0], email=row[2], tele=row[1])
                 db.session.add(lin)
                 db.session.commit()
@@ -92,7 +97,6 @@ def eupdate(id):
                 db.session.add(mov)
                 db.session.delete(emov)
                 db.session.commit()
-
-        return redirect(url_for('views.associacao'))
-    flash("Dados não existem", "error")
+                return redirect(url_for('views.associacao'))
+        flash("Dados não existem", "error")
     return render_template('easc.html', data=emov)
