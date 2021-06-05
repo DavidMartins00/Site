@@ -7,8 +7,9 @@ import pandas as pd
 
 views = Blueprint('views', __name__)
 
-ecount =0
+ecount = 0
 count = 0
+tcount = 0
 
 
 @views.route('/')
@@ -26,21 +27,28 @@ def associacao():
         nome = request.form.get('nome')
         email = request.form.get('email')
         tele = request.form.get('tele')
-
         # Adicionar na bd
-        mov = Movim(nome=nome, email=email, tele=tele)
-        db.session.add(mov)
-        db.session.commit()
-        flash("Associação Adicionada", category="success")
+        if nome == "" or email == "" or tele == "":
+            elin = Easc(nome=nome, email=email, tele=tele)
+            db.session.add(elin)
+            db.session.commit()
+            flash("Associação incompleta adicionada a tabela de erros", category="error")
+        else:
+            mov = Movim(nome=nome, email=email, tele=tele)
+            db.session.add(mov)
+            db.session.commit()
+            flash("Associação Adicionada", category="success")
+
         return redirect(url_for('views.associacao'))
-    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount)
+    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount, tcnt=tcount)
 
 
 @views.route('/uploadcsv', methods=['GET', 'POST'])
 # @login_required
 def uploadcsv():
-    global count,ecount
+    global count, ecount, tcount
     if request.method == 'POST':
+        count = 0
         file = request.files['file']
         # CVS Column Names
         col_names = ['nome', 'email', 'telefone']
@@ -60,6 +68,7 @@ def uploadcsv():
                 lin = Movim(nome=row[0], email=row[2], tele=row[1])
                 db.session.add(lin)
                 db.session.commit()
+        tcount += count
         return redirect(url_for('views.associacao'))
     else:
         flash("Erro no ficheiro", "error")
