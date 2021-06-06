@@ -9,7 +9,6 @@ views = Blueprint('views', __name__)
 
 ecount = 0
 count = 0
-tcount = 0
 
 
 @views.route('/')
@@ -22,6 +21,7 @@ def dashboard():
 @views.route('/associacao', methods=['GET', 'POST'])
 # @login_required
 def associacao():
+    global count, ecount
     if request.method == 'POST':
         # Ir buscar dados ao html
         nome = request.form.get('nome')
@@ -29,24 +29,26 @@ def associacao():
         tele = request.form.get('tele')
         # Adicionar na bd
         if nome == "" or email == "" or tele == "":
+            ecount += 1
             elin = Easc(nome=nome, email=email, tele=tele)
             db.session.add(elin)
             db.session.commit()
             flash("Associação incompleta adicionada a tabela de erros", category="error")
         else:
+            count += 1
             mov = Movim(nome=nome, email=email, tele=tele)
             db.session.add(mov)
             db.session.commit()
             flash("Associação Adicionada", category="success")
 
         return redirect(url_for('views.associacao'))
-    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount, tcnt=tcount)
+    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount)
 
 
 @views.route('/uploadcsv', methods=['GET', 'POST'])
 # @login_required
 def uploadcsv():
-    global count, ecount, tcount
+    global count, ecount
     if request.method == 'POST':
         count = 0
         file = request.files['file']
@@ -68,7 +70,6 @@ def uploadcsv():
                 lin = Movim(nome=row[0], email=row[2], tele=row[1])
                 db.session.add(lin)
                 db.session.commit()
-        tcount += count
         return redirect(url_for('views.associacao'))
     else:
         flash("Erro no ficheiro", "error")

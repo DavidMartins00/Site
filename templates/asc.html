@@ -135,9 +135,9 @@
     right: 0;">
         <p>Registros importados: {{ cnt }}</p>
         <br>
-        <p id="tt">Total registros importados: {{ tcnt }}</p>
+        <p id="tt">Total registros importados:</p>
         <br>
-        <p id="ett">Total registros falhados: {{ ecnt }}</p>
+        <p>Total registros falhados: {{ ecnt }}</p>
     </div>
 
     <script>
@@ -188,6 +188,7 @@
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
                 }
             });
+            document.getElementById('tt').innerText = "Total registros importados: " + $('#tabela').DataTable().rows().count();
         });
 
         $(document).ready(function () {
