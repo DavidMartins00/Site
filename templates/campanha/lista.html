@@ -7,6 +7,7 @@
             <th scope="col">Id</th>
             <th scope="col">Empresa</th>
             <th scope="col">Produto</th>
+            <th scope="col">Users</th>
             <th scope="col">Campanha</th>
             <th scope="col">Valor</th>
             <th scope="col">Descrição</th>
@@ -30,13 +31,30 @@
                         <td>{{ pro.nome }}</td>
                     {% endif %}
                 {% endfor %}
+                <td>
+                    <a id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">Ver</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown">
+                        {% for usr in campuser %}
+                            {% if usr.campanha == data.id %}
+                                {% for usrr in users %}
+                                    {% if usrr.id == usr.user %}
+                                        <li><a class="dropdown-item" href="#">{{ usrr.name }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
+
+
                 <td>{{ data.campanha }}</td>
                 <td>{{ data.valorcamp }}</td>
                 <td>{{ data.descr }}</td>
                 <td>{{ data.ofertas }}</td>
                 <td>{{ data.condicoes }}</td>
                 <td>
-                    <div id="carousel" style="width: 60px; height: auto;" data-bs-pause="false" class="carousel slide"
+                    <div id="carousel" style="width: 60px; height: auto;" data-bs-pause="false"
+                         class="carousel slide"
                          data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -66,6 +84,6 @@
     </table>
     <script>
         $("img").error(function () {
-        $(this).css({visibility:"hidden"});
-    });</script>
+            $(this).css({visibility: "hidden"});
+        });</script>
 {% endblock %}

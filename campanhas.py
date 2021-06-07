@@ -2,7 +2,7 @@ import os
 import random
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
-from models import Campanha, Produto, Empresa
+from models import Campanha, Produto, Empresa, CampUser, User
 from flask_app import db, app
 from perms import roles
 
@@ -10,9 +10,11 @@ campanha = Blueprint('campanha', __name__)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Adicionar Produto
 @campanha.route('/addcampanha', methods=['GET', 'POST'])
@@ -28,8 +30,7 @@ def criar():
         descr = request.form.get('descr')
         condicoes = request.form.get('condicoes')
         ofertas = request.form.get('ofertas')
-        fotos = request.form.get('fotos')
-
+        users = request.form.getlist('users')
         # FOTO
         foto = str(random.randrange(1, 9223372036854775807))
 
@@ -55,10 +56,18 @@ def criar():
                             condicoes=condicoes, ofertas=ofertas, fotos=foto)
         db.session.add(campanha)
         db.session.commit()
+        print(campanha.id)
+        for data in users:
+            campuser = CampUser(campanha=campanha.id, user=data)
+            db.session.add(campuser)
+            db.session.commit()
         flash("Campanha adicionado", category="success")
         return redirect(url_for('campanha.lista'))
 
-    return render_template("campanha/criar.html", empresa=Empresa.query.all(), produto=Produto.query.all())
+    users = [i for i in User.query.all() if not CampUser.query.filter_by(user=i.id).first()]
+
+    return render_template("campanha/criar.html", empresa=Empresa.query.all(), produto=Produto.query.all(),
+                           users=users)
 
 
 # Listar produto
@@ -66,7 +75,8 @@ def criar():
 @login_required
 @roles('Admin')
 def lista():
-    return render_template("campanha/lista.html", campanha=Campanha.query.all(), produto=Produto.query.all(), empresa=Empresa.query.all())
+    return render_template("campanha/lista.html", campanha=Campanha.query.all(), produto=Produto.query.all(),
+                           empresa=Empresa.query.all(), campuser=CampUser.query.all(), users=User.query.all())
 
 
 # Apagar Produto
@@ -121,4 +131,5 @@ def update(id):
             return redirect(url_for('campanha.lista'))
         flash("Campanha não existe", "error")
 
-    return render_template('campanha/editar.html', data=campanha, empresa=Empresa.query.all(), produto=Produto.query.all())
+    return render_template('campanha/editar.html', data=campanha, empresa=Empresa.query.all(),
+                           produto=Produto.query.all())

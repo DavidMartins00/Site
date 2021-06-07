@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     tel = db.Column(db.Integer(), nullable=True)
     tempo = db.Column(db.Integer(), default=0)
     tipo = db.Column(db.Integer(), default=0)
+    campuser = db.relationship('CampUser')
 
 
 class Produto(db.Model):
@@ -42,6 +43,13 @@ class Campanha(db.Model):
     condicoes = db.Column(db.String(250))
     ofertas = db.Column(db.String(250))
     fotos = db.Column(db.String(250))
+    campuser = db.relationship('CampUser', cascade="all, delete-orphan")
+
+
+class CampUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    campanha = db.Column(db.Integer, db.ForeignKey('campanha.id'))
 
 
 class Movim(db.Model):
