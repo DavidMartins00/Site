@@ -44,6 +44,7 @@ class Campanha(db.Model):
     ofertas = db.Column(db.String(250))
     fotos = db.Column(db.String(250))
     campuser = db.relationship('CampUser', cascade="all, delete-orphan")
+    deleted = db.Column(db.Boolean(), default=False)
 
 
 class CampUser(db.Model):

@@ -74,7 +74,7 @@ def criar():
 @login_required
 @roles('Admin')
 def lista():
-    return render_template("campanha/lista.html", campanha=Campanha.query.all(), produto=Produto.query.all(),
+    return render_template("campanha/lista.html", campanha=Campanha.query.filter_by(deleted=False), produto=Produto.query.all(),
                            empresa=Empresa.query.all(), campuser=CampUser.query.all(), users=User.query.all())
 
 
@@ -85,7 +85,8 @@ def lista():
 def apagar(id):
     campanha = Campanha.query.get_or_404(id)
     if campanha:
-        db.session.delete(campanha)
+        CampUser.query.filter_by(campanha=id).delete()
+        campanha.deleted = True
         db.session.commit()
     else:
         flash("Campanha não existe", "error")
