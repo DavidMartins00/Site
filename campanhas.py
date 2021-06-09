@@ -56,7 +56,6 @@ def criar():
                             condicoes=condicoes, ofertas=ofertas, fotos=foto)
         db.session.add(campanha)
         db.session.commit()
-        print(campanha.id)
         for data in users:
             campuser = CampUser(campanha=campanha.id, user=data)
             db.session.add(campuser)
@@ -107,6 +106,14 @@ def update(id):
             campanha.descr = request.form.get('descr')
             campanha.condicoes = request.form.get('condicoes')
             campanha.ofertas = request.form.get('ofertas')
+            users = request.form.getlist('users')
+            # Apagar os atuais registros associados a camapanha
+            CampUser.query.filter_by(campanha=id).delete()
+            db.session.commit()
+            for data in users:
+                campuser = CampUser(campanha=campanha.id, user=data)
+                db.session.add(campuser)
+                db.session.commit()
             if not request.form.get('foto') == "":
                 foto = str(random.randrange(1, 9223372036854775807))
 
@@ -131,5 +138,13 @@ def update(id):
             return redirect(url_for('campanha.lista'))
         flash("Campanha não existe", "error")
 
+    userss = campanha.campuser
+    # Criar variavel com todos os nomes na base de dados
+    nomes = [i.name for i in User.query.all()]
+    # Adicionar um campo no inicio da array para o index dos nomes começar em 1
+    nomes.insert(0, "")
+    # Mostrar os users que nao estao ja selecionados em outras campanhas
+    users = [i for i in User.query.all() if not CampUser.query.filter_by(user=i.id).first()]
+
     return render_template('campanha/editar.html', data=campanha, empresa=Empresa.query.all(),
-                           produto=Produto.query.all())
+                           produto=Produto.query.all(), userss=userss, users=users, nomes=nomes)

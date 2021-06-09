@@ -21,6 +21,18 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Users</label>
+                <select class="ui fluid search dropdown" multiple="" id="users" name="users">
+                    {% for data in users %}
+                        <option value="{{ data.id }}">{{ data.name }}</option>
+                    {% endfor %}
+                <!--Mostrar users ja selecionados-->
+                    {% for data in userss %}
+                        <option selected value="{{ data.user }}">{{ nomes[data.user] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Campanha</label>
                 <input type="text" class="form-control" value="{{ data.campanha }}" name="campanha" id="campanha"
                        placeholder="Campanha">
