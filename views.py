@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required, current_user
-from models import Movim, Easc
+from models import Asc, Easc, Variavel
 from flask_app import db
 from perms import roles
 import pandas as pd
 
 views = Blueprint('views', __name__)
 
-ecount = 0
-count = 0
 
 @views.route('/')
 @views.route('/dashboard')
@@ -18,9 +16,16 @@ def dashboard():
 
 
 @views.route('/associacao', methods=['GET', 'POST'])
-# @login_required
+@login_required
+@roles("Admin")
 def associacao():
-    global count, ecount
+    var = Variavel.query.get(1)
+    if not var:
+        var = Variavel(count=0, ecount=0)
+        db.session.add(var)
+        db.session.commit()
+    count = var.count
+    ecount = var.ecount
     if request.method == 'POST':
         # Ir buscar dados ao html
         nome = request.form.get('nome')
@@ -35,19 +40,24 @@ def associacao():
             flash("Associação incompleta adicionada a tabela de erros", category="error")
         else:
             count += 1
-            mov = Movim(nome=nome, email=email, tele=tele)
+            mov = Asc(nome=nome, email=email, tele=tele)
             db.session.add(mov)
             db.session.commit()
             flash("Associação Adicionada", category="success")
-
+        var.count = count
+        var.ecount = ecount
+        db.session.commit()
         return redirect(url_for('views.associacao'))
-    return render_template("asc.html", movi=Movim.query.all(), er=Easc.query.all(), cnt=count, ecnt=ecount)
+    return render_template("asc.html", movi=Asc.query.all(), er=Easc.query.all(), var=Variavel.query.get(1))
 
 
 @views.route('/uploadcsv', methods=['GET', 'POST'])
-# @login_required
+@login_required
+@roles("Admin")
 def uploadcsv():
-    global count, ecount
+    var = Variavel.query.get(1)
+    count = var.count
+    ecount = var.ecount
     if request.method == 'POST':
         count = 0
         file = request.files['file']
@@ -66,18 +76,22 @@ def uploadcsv():
                 db.session.commit()
             else:
                 count += 1
-                lin = Movim(nome=row[0], email=row[2], tele=row[1])
+                lin = Asc(nome=row[0], email=row[2], tele=row[1])
                 db.session.add(lin)
                 db.session.commit()
+            var.count = count
+            var.ecount = ecount
+            db.session.commit()
         return redirect(url_for('views.associacao'))
     else:
         flash("Erro no ficheiro", "error")
 
 
 @views.route('/asc/<int:id>/update', methods=['GET', 'POST'])
-# @login_required
+@login_required
+@roles("Admin")
 def update(id):
-    mov = Movim.query.get_or_404(id)
+    mov = Asc.query.get_or_404(id)
     if request.method == 'POST':
         if mov:
             mov.nome = request.form.get('nome')
@@ -92,7 +106,8 @@ def update(id):
 
 
 @views.route('/easc/<int:id>/update', methods=['GET', 'POST'])
-# @login_required
+@login_required
+@roles("Admin")
 def eupdate(id):
     emov = Easc.query.get_or_404(id)
     if request.method == 'POST':
@@ -102,7 +117,7 @@ def eupdate(id):
             tele = request.form.get('tele')
             if nome != "" and email != "" and tele != "":
                 # Adicionar na bd
-                mov = Movim(nome=nome, email=email, tele=tele)
+                mov = Asc(nome=nome, email=email, tele=tele)
                 db.session.add(mov)
                 db.session.delete(emov)
                 db.session.commit()

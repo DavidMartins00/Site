@@ -53,7 +53,7 @@ class CampUser(db.Model):
     campanha = db.Column(db.Integer, db.ForeignKey('campanha.id'))
 
 
-class Movim(db.Model):
+class Asc(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(150))
     email = db.Column(db.String(150))
@@ -69,3 +69,9 @@ class Easc(db.Model):
 
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
+
+class Variavel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    count = db.Column(db.Integer)
+    ecount = db.Column(db.Integer)
