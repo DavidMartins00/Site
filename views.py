@@ -10,7 +10,6 @@ views = Blueprint('views', __name__)
 ecount = 0
 count = 0
 
-
 @views.route('/')
 @views.route('/dashboard')
 @login_required
