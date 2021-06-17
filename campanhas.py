@@ -1,7 +1,6 @@
 import os
 import random
 import shutil
-
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
 from models import Campanha, Produto, Empresa, CampUser, User
