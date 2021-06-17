@@ -1,3 +1,4 @@
+import shutil
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_from_directory
 from flask_login import login_required
 from models import Produto, Empresa, Campanha
@@ -75,6 +76,10 @@ def apagar(id):
     if produto:
         db.session.delete(produto)
         db.session.commit()
+        path = "static/uploads/"+produto.foto
+        if os.path.exists(path):
+            # removing the file using the os.remove() method
+            shutil.rmtree(path)
     else:
         flash("Produto não existe", "error")
     return redirect(url_for('produto.lista'))
@@ -95,7 +100,11 @@ def update(id):
                 foto = str(random.randrange(1, 9223372036854775807))
                 files = request.files.getlist('files[]')
                 fol = app.config['UPLOAD_FOLDER']
-
+                #Apagar diretorio anterior
+                path = "static/uploads/" + produto.foto
+                if os.path.exists(path):
+                    # removing the file using the os.remove() method
+                    shutil.rmtree(path)
                 fol += "/" + foto
                 os.mkdir(fol)
                 temp = 1

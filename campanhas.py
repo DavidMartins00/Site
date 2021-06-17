@@ -1,5 +1,7 @@
 import os
 import random
+import shutil
+
 from flask import Blueprint, render_template, request, flash, url_for, redirect
 from flask_login import login_required
 from models import Campanha, Produto, Empresa, CampUser, User
@@ -33,6 +35,7 @@ def criar():
         users = request.form.getlist('users')
         # FOTO
         foto = str(random.randrange(1, 9223372036854775807))
+
 
         if 'files[]' not in request.files:
             flash('No file part')
@@ -88,6 +91,10 @@ def apagar(id):
         CampUser.query.filter_by(campanha=id).delete()
         campanha.deleted = True
         db.session.commit()
+        path = "static/uploads/" + campanha.fotos
+        if os.path.exists(path):
+            # removing the file using the os.remove() method
+            shutil.rmtree(path)
     else:
         flash("Campanha não existe", "error")
     return redirect(url_for('campanha.lista'))
@@ -118,9 +125,10 @@ def update(id):
             if not request.form.get('foto') == "":
                 foto = str(random.randrange(1, 9223372036854775807))
 
-                if 'files[]' not in request.files:
-                    flash('No file part')
-                    return redirect(request.url)
+                path = "static/uploads/" + campanha.fotos
+                if os.path.exists(path):
+                    # removing the file using the os.remove() method
+                    shutil.rmtree(path)
 
                 files = request.files.getlist('files[]')
                 fol = app.config['UPLOAD_FOLDER']
