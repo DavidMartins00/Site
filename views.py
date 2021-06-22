@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, request, flash, url_for, redirect
+import csv
+import io
+
+from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
-from models import Asc, Easc, Variavel
+from numpy import unicode
+
+from models import Asc, Easc, Variavel, Download, User
 from flask_app import db
 from perms import roles
 import pandas as pd
+from datetime import date
 
 views = Blueprint('views', __name__)
 
@@ -13,6 +19,41 @@ views = Blueprint('views', __name__)
 @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user)
+
+
+@views.route('/movimentacao')
+@login_required
+def movim():
+    return render_template("movim.html", asc=Asc.query.all())
+
+
+@views.route('/download')
+def download():
+    leads = current_user.leads
+    idc = current_user.id
+    dnw = Download.query.filter_by(cliente=idc).order_by(Download.id.desc()).first()
+    if dnw:
+        num = dnw.qtd + leads
+        asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
+        dnr = Download(cliente=idc, data=date.today(), qtd=dnw.qtd)
+    else:
+        asc = Asc.query.filter(Asc.id.between('0', leads))
+        dnr = Download(cliente=idc, data=date.today(), qtd=leads)
+
+    # Fazer download do arquivo em csv
+    # ficheiro = sql_query_to_csv(asc, ["id"])
+
+    with open('exportar.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(["Nome", "Email", "Telefone"])
+        for p in asc:
+            csvwriter.writerow([p.nome, p.email, p.tele])
+
+    db.session.add(dnr)
+    db.session.commit()
+    # return redirect(url_for('views.movim'))
+    # return send_file('ficheiro', attachment_filename='exportar.csv', as_attachment=True)
+    return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True)
 
 
 @views.route('/associacao', methods=['GET', 'POST'])

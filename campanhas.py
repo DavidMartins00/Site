@@ -106,7 +106,7 @@ def update(id):
     campanha = Campanha.query.get_or_404(id)
     if request.method == 'POST':
         if campanha:
-            campanha.empresa = request.form.get('empresa')
+            campanha.cli = request.form.get('empresa')
             campanha.produto = request.form.get('produto')
             campanha.campanha = request.form.get('campanha')
             campanha.valorcamp = request.form.get('valorcamp')

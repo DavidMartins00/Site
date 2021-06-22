@@ -13,18 +13,16 @@ auth = Blueprint('auth', __name__)
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
-        password = request.form.get('password')
+        senha = request.form.get('password')
 
         user = User.query.filter_by(email=email).first()
         if user:
-            if check_password_hash(user.password, password):
+            if check_password_hash(user.password, senha):
                 flash("Loggedin com sucesso", category="success")
                 login_user(user, remember=True)
                 return redirect(url_for('views.dashboard'))
             else:
                 flash("Credenciais erradas", category="error")
-        else:
-            flash("Credenciais erradas", category="error")
     return render_template("login.html", user=current_user)
 
 
@@ -38,7 +36,7 @@ def logout():
 
 # Registrar Utilizador
 @auth.route('/register', methods=['GET', 'POST'])
-#@roles("Admin")
+# @roles("Admin")
 def sign_up():
     if request.method == 'POST':
         # Ir buscar dados ao html
@@ -71,7 +69,7 @@ def sign_up():
         else:
             # Adicionar user na bd
             new_user = User(email=email, name=nome, role=role, nif=nif, tel=tel,
-                            password=generate_password_hash(password, method='sha256'),tipo=tipo)
+                            password=generate_password_hash(password, method='sha256'), tipo=tipo)
             db.session.add(new_user)
             db.session.commit()
             flash("Conta criada", category="success")

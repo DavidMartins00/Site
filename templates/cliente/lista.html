@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Teste{% endblock %}
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Email</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Tel</th>
+            <th scope="col">Leads</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in cliente %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.email }}</td>
+                <td>{{ data.pais }}</td>
+                <td>{{ data.tel }}</td>
+                <td>{{ data.leads }}</td>
+                <td><a class="btn btn-danger" href="/cliente/{{ data.id }}/delete">Apagar</a>
+                    <a class="btn btn-warning" href="/cliente/{{ data.id }}/update">Editar</a></td>
+
+            </tr>
+        {% endfor %}
+        <td><a href="/dashboard" class="btn btn-success">Voltar</a></td>
+        <td><a href="/addcliente" class="btn btn-dark">Adicionar</a></td>
+        </tbody>
+    </table>
+{% endblock %}

@@ -5,7 +5,7 @@ from flask_login import UserMixin
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(150))
+    password = db.Column(db.String)
     name = db.Column(db.String(150))
     role = db.Column(db.String(150))
     nif = db.Column(db.Integer(), nullable=True)
@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     tempo = db.Column(db.Integer(), default=0)
     tipo = db.Column(db.Integer(), default=0)
     campuser = db.relationship('CampUser')
+    pais = db.Column(db.String(150), nullable=True)
+    leads = db.Column(db.Integer, nullable=True)
 
 
 class Produto(db.Model):
@@ -75,3 +77,10 @@ class Variavel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     count = db.Column(db.Integer)
     ecount = db.Column(db.Integer)
+
+
+class Download(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cliente = db.Column(db.Integer, db.ForeignKey('user.id'))
+    data = db.Column(db.DATE)
+    qtd = db.Column(db.Integer)

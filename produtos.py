@@ -92,7 +92,7 @@ def update(id):
     produto = Produto.query.get_or_404(id)
     if request.method == 'POST':
         if produto:
-            produto.empresa = request.form.get('empresa')
+            produto.cli = request.form.get('empresa')
             produto.nome = request.form.get('nome')
             produto.valor = request.form.get('valor')
             produto.descr = request.form.get('descr')

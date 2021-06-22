@@ -10,7 +10,7 @@ def roles(*roles):
             if current_user.role not in roles:
                 # Redirect the user to an unauthorized notice!
                 flash("Não tem permissão para aceder a esta pagina!", category="error")
-                return redirect(url_for('views.dasboard'))
+                return redirect(url_for('views.dashboard'))
             return f(*args, **kwargs)
         return wrapped
     return wrapper

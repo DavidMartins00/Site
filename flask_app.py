@@ -4,6 +4,8 @@ from os import path
 from flask_login import LoginManager
 from os.path import join, dirname, realpath
 
+from sqlalchemy import create_engine
+
 db = SQLAlchemy()
 DB_NAME = "database.db"
 UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'static/uploads/')
@@ -21,6 +23,7 @@ from users import user
 from produtos import produto
 from empresas import empresa
 from campanhas import campanha
+from clientes import cli
 
 app.register_blueprint(views, url_prefix='/')
 app.register_blueprint(auth, url_prefix='/')
@@ -28,12 +31,21 @@ app.register_blueprint(user, url_prefix='/')
 app.register_blueprint(produto, url_prefix='/')
 app.register_blueprint(empresa, url_prefix='/')
 app.register_blueprint(campanha, url_prefix='/')
+app.register_blueprint(cli, url_prefix='/')
 
 from models import User
 
 # Criar base de dados
 if not path.exists('site/' + DB_NAME):
     db.create_all(app=app)
+
+
+#####################
+# Timer para mudar os a quantidade de arquivos que o cliente pode baixar
+# (Não funciona)
+# import timer
+# timer.start()
+#####################
 
 # Login Manager
 login_manager = LoginManager()
