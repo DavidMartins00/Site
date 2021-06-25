@@ -24,7 +24,9 @@ def dashboard():
 @views.route('/movimentacao')
 @login_required
 def movim():
-    return render_template("movim.html", asc=Asc.query.all())
+    dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
+
+    return render_template("movim.html", asc=Asc.query.all(), download=dnw)
 
 
 @views.route('/download')

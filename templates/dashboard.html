@@ -6,25 +6,30 @@
             <div class="col-4" style="background-color: dimgray;">
                 <div class="d-grid col-3 gap-3 mx-auto">
                     <br>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">Administrativo
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/users">Cadastro Usuario</a></li>
-                            <li><a class="dropdown-item" href="/empresas">Cadastro Empresa</a></li>
-                            <li><a class="dropdown-item" href="/produtos">Cadastro Produto</a></li>
-                            <li><a class="dropdown-item" href="/campanhas">Cadastro Campanha</a></li>
-                            <li><a class="dropdown-item" href="/cliente">Cadastro Cliente</a></li>
-                            <li><a class="dropdown-item" href="/associacao">Associação</a></li>
-                        </ul>
-                    </div>
-                    <button disabled type="button" class="btn btn-primary">Gerente</button>
-                    <button disabled type="button" class="btn btn-primary">Supervisor</button>
+                    {% if not user.role == "Cliente" %}
+                        <div class="btn-group">
+
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Administrativo
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/users">Cadastro Usuario</a></li>
+                                <li><a class="dropdown-item" href="/empresas">Cadastro Empresa</a></li>
+                                <li><a class="dropdown-item" href="/produtos">Cadastro Produto</a></li>
+                                <li><a class="dropdown-item" href="/campanhas">Cadastro Campanha</a></li>
+                                <li><a class="dropdown-item" href="/cliente">Cadastro Cliente</a></li>
+                                <li><a class="dropdown-item" href="/associacao">Associação</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if not user.role == "Cliente" %}
+                        <button disabled type="button" class="btn btn-primary">Gerente</button>
+                        <button disabled type="button" class="btn btn-primary">Supervisor</button>
+                    {% endif %}
                     <a href="/movimentacao" class="btn btn-primary">Movimentação</a>
-                    <button type="button" class="btn btn-primary">Suporte</button>
+                    <button disabled type="button" class="btn btn-primary">Suporte</button>
                     <button type="button" onclick="chronoStop()" class="btn btn-success">Pausa</button>
-                    <button type="button" class="btn btn-success">Sair</button>
+                    <button disabled type="button" class="btn btn-success">Sair</button>
                     <a href="/logout" class="btn btn-danger">Encerrar dia</a>
                 </div>
                 <div>
@@ -51,6 +56,7 @@
         </div>
     </div>
     <script>
+
 
         n = new Date();
         y = n.getFullYear();
