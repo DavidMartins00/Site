@@ -1,3 +1,5 @@
+import datetime
+
 from flask_app import db
 from flask_login import UserMixin
 
@@ -82,5 +84,5 @@ class Variavel(db.Model):
 class Download(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cliente = db.Column(db.Integer, db.ForeignKey('user.id'))
-    data = db.Column(db.DATE)
+    data = db.Column(db.DATETIME, default=datetime.datetime.utcnow)
     qtd = db.Column(db.Integer)

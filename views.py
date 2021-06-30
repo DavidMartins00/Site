@@ -1,11 +1,7 @@
 import csv
-import io
-
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
-from numpy import unicode
-
-from models import Asc, Easc, Variavel, Download, User
+from models import Asc, Easc, Variavel, Download
 from flask_app import db
 from perms import roles
 import pandas as pd
@@ -25,8 +21,16 @@ def dashboard():
 @login_required
 def movim():
     dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
+    leads = current_user.leads
+    if dnw:
+        num = dnw.qtd + leads
+        asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
+    else:
+        asc = Asc.query.filter(Asc.id.between('0', leads))
 
-    return render_template("movim.html", asc=Asc.query.all(), download=dnw)
+    dno = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc())
+
+    return render_template("movim.html", asc=asc, download=dno)
 
 
 @views.route('/download')
@@ -43,8 +47,6 @@ def download():
         dnr = Download(cliente=idc, data=date.today(), qtd=leads)
 
     # Fazer download do arquivo em csv
-    # ficheiro = sql_query_to_csv(asc, ["id"])
-
     with open('exportar.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',')
         csvwriter.writerow(["Nome", "Email", "Telefone"])
@@ -53,8 +55,6 @@ def download():
 
     db.session.add(dnr)
     db.session.commit()
-    # return redirect(url_for('views.movim'))
-    # return send_file('ficheiro', attachment_filename='exportar.csv', as_attachment=True)
     return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True)
 
 
