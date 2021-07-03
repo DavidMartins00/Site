@@ -26,7 +26,7 @@
                                         {% for data in asc %}
                                             <tr>
                                                 <td>{{ data.id }}</td>
-                                                <td>{{ data.nome }}</td>
+                                                <td style="word-wrap: break-word;word-break:break-all;width: 400rem;">{{ data.nome }}</td>
                                                 <td>{{ data.email }}</td>
                                                 <td>{{ data.tele }}</td>
                                             </tr>
@@ -57,7 +57,7 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#tabela').DataTable({
+            var table = $('#tabela').removeAttr('width').DataTable({
                 select: 'multi',
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json'
@@ -68,12 +68,17 @@
                 info: false,
                 scrollX: true,
                 scrollCollapse: true,
-                columnDefs: [
-                    {width: '20%', targets: 0}
-                ],
-                fixedColumns: true
-            });
+                columnDefs: [{width: 200, targets: 2}],
 
+                fixedColumns: true,
+                "createdRow": function (row, data, dataIndex, cells) {
+                    if (data[0] <= 2000) {
+                        $('td', row).css('background-color', 'Red');
+                        $('td', row).css('color', 'White');
+                    }
+                }
+            });
+            new $.fn.dataTable.FixedColumns(table);
 
             $('#btn').click(function () {
                 var data = "Passou"
@@ -90,6 +95,7 @@
 
             $('#tabela').css('display', 'block');
             table.columns.adjust().draw();
+
         });
     </script>
 

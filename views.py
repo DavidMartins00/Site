@@ -1,4 +1,6 @@
 import csv
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
 from models import Asc, Easc, Variavel, Download
@@ -22,15 +24,16 @@ def dashboard():
 def movim():
     dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
     leads = current_user.leads
+    num = 0
     if dnw:
         num = dnw.qtd + leads
-        asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
+        asc = Asc.query.filter(Asc.id.between('0', num))
     else:
         asc = Asc.query.filter(Asc.id.between('0', leads))
 
     dno = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc())
 
-    return render_template("movim.html", asc=asc, download=dno)
+    return render_template("movim.html", asc=asc, download=dno, num=num)
 
 
 @views.route('/download')
@@ -41,10 +44,10 @@ def download():
     if dnw:
         num = dnw.qtd + leads
         asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
-        dnr = Download(cliente=idc, data=date.today(), qtd=dnw.qtd)
+        dnr = Download(cliente=idc, data=datetime.now(), qtd=dnw.qtd)
     else:
         asc = Asc.query.filter(Asc.id.between('0', leads))
-        dnr = Download(cliente=idc, data=date.today(), qtd=leads)
+        dnr = Download(cliente=idc, data=datetime.now(), qtd=leads)
 
     # Fazer download do arquivo em csv
     with open('exportar.csv', 'w', newline='') as csvfile:
