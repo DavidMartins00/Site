@@ -144,3 +144,8 @@ div.dataTables_wrapper {
     margin: 0 auto;
 }
 
+.scroll {
+    overflow: auto;
+    height:75%;
+}
+

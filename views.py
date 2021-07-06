@@ -1,13 +1,11 @@
 import csv
 from datetime import datetime
-
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
 from models import Asc, Easc, Variavel, Download
 from flask_app import db
 from perms import roles
 import pandas as pd
-from datetime import date
 
 views = Blueprint('views', __name__)
 
@@ -38,6 +36,7 @@ def movim():
 
 @views.route('/download')
 def download():
+    print("Passou1")
     leads = current_user.leads
     idc = current_user.id
     dnw = Download.query.filter_by(cliente=idc).order_by(Download.id.desc()).first()
@@ -58,7 +57,8 @@ def download():
 
     db.session.add(dnr)
     db.session.commit()
-    return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True)
+    print("Passou")
+    return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True, cache_timeout=0)
 
 
 @views.route('/associacao', methods=['GET', 'POST'])
