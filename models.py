@@ -87,4 +87,4 @@ class Download(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cliente = db.Column(db.Integer, db.ForeignKey('user.id'))
     data = db.Column(db.DATETIME)
-    qtd = db.Column(db.Integer)
+    qtd = db.Column(db.Integer, default=0)

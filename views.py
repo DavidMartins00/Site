@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
-from models import Asc, Easc, Variavel, Download
+from models import Asc, Easc, Variavel, Download, User
 from flask_app import db
 from perms import roles
 import pandas as pd
@@ -24,6 +24,7 @@ def movim():
     dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
     leads = current_user.leads
     num = 0
+    qtd = dnw.qtd
     if dnw:
         num = dnw.qtd + leads
         asc = Asc.query.filter(Asc.id.between('0', num))
@@ -32,10 +33,11 @@ def movim():
 
     dno = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc())
 
-    return render_template("movim.html", asc=asc, download=dno, num=num, data=json.dumps(num))
+    return render_template("movim.html", asc=asc, download=dno, num=num, data=json.dumps(qtd))
 
 
 @views.route('/download')
+@login_required
 def download():
     leads = current_user.leads
     idc = current_user.id
@@ -43,10 +45,10 @@ def download():
     if dnw:
         num = dnw.qtd + leads
         asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
-        dnr = Download(cliente=idc, data=datetime.now(), qtd=dnw.qtd)
+        dnr = Download(cliente=idc, data=datetime.now())
     else:
         asc = Asc.query.filter(Asc.id.between('0', leads))
-        dnr = Download(cliente=idc, data=datetime.now(), qtd=leads)
+        dnr = Download(cliente=idc, data=datetime.now())
 
     # Fazer download do arquivo em csv
     with open('exportar.csv', 'w', newline='') as csvfile:
@@ -58,6 +60,18 @@ def download():
     db.session.add(dnr)
     db.session.commit()
     return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True, cache_timeout=0)
+
+@views.route('/mudmes')
+@login_required
+def mudmes():
+    dnw = Download.query.all()
+    for i in dnw:
+        idcli = i.cliente
+        usr = User.query.filter_by(id=idcli).first()
+        if usr:
+            i.qtd = i.qtd + usr.leads
+    db.session.commit()
+    return redirect(url_for('views.movim'))
 
 
 @views.route('/associacao', methods=['GET', 'POST'])
