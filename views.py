@@ -1,4 +1,5 @@
 import csv
+import json
 from datetime import datetime
 from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
 from flask_login import login_required, current_user
@@ -31,12 +32,11 @@ def movim():
 
     dno = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc())
 
-    return render_template("movim.html", asc=asc, download=dno, num=num)
+    return render_template("movim.html", asc=asc, download=dno, num=num, data=json.dumps(num))
 
 
 @views.route('/download')
 def download():
-    print("Passou1")
     leads = current_user.leads
     idc = current_user.id
     dnw = Download.query.filter_by(cliente=idc).order_by(Download.id.desc()).first()
@@ -57,7 +57,6 @@ def download():
 
     db.session.add(dnr)
     db.session.commit()
-    print("Passou")
     return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True, cache_timeout=0)
 
 
