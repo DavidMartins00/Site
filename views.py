@@ -24,8 +24,9 @@ def movim():
     dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
     leads = current_user.leads
     num = 0
-    qtd = dnw.qtd
+    qtd = 0
     if dnw:
+        qtd = dnw.qtd
         num = dnw.qtd + leads
         asc = Asc.query.filter(Asc.id.between('0', num))
     else:

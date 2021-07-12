@@ -146,6 +146,11 @@ div.dataTables_wrapper {
 
 .scroll {
     overflow: auto;
-    height:50%;
+    height: 50%;
+}
+
+.bgmovim {
+    position: absolute;
+    bottom: 1px;
 }
 
