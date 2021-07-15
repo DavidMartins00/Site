@@ -18,7 +18,11 @@
             </div>
             <div class="form-group">
                 <label>Pais</label>
-                <input type="text" class="form-control" name="pais" id="pais" placeholder="Pais">
+                <select class="ui fluid search dropdown" multiple="" id="pais" name="pais">
+                    {% for data in pais %}
+                        <option value="{{ data.id }}">{{ data.nome }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label>Telemovel</label>

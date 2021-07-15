@@ -88,3 +88,17 @@ class Download(db.Model):
     cliente = db.Column(db.Integer, db.ForeignKey('user.id'))
     data = db.Column(db.DATETIME)
     qtd = db.Column(db.Integer, default=0)
+    qtm = db.Column(db.Integer, default=0)
+    desc = db.Column(db.Boolean, default=False)
+
+
+class PaisUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    pais = db.Column(db.Integer, db.ForeignKey('pais.id'))
+
+
+class Pais(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    paisuser = db.relationship('PaisUser')
+    nome = db.Column(db.String(150))

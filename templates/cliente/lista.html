@@ -19,7 +19,20 @@
                 <td>{{ data.id }}</td>
                 <td>{{ data.name }}</td>
                 <td>{{ data.email }}</td>
-                <td>{{ data.pais }}</td>
+                <td>
+                    <a id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">Ver</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown">
+                        {% for pu in paisuser %}
+                            {% if pu.user == data.id %}
+                                {% for ps in pais %}
+                                    {% if ps.id == pu.pais %}
+                                        <li><a class="dropdown-item" href="#">{{ ps.nome }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
                 <td>{{ data.tel }}</td>
                 <td>{{ data.leads }}</td>
                 <td><a class="btn btn-danger" href="/cliente/{{ data.id }}/delete">Apagar</a>

@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label>Users</label>
                 <select class="ui fluid search dropdown" multiple="" id="users" name="users">
-                    {% for data in users %}
+                    {% for data in pais %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
                     {% endfor %}
                 </select>

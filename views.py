@@ -24,9 +24,9 @@ def movim():
     dnw = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc()).first()
     leads = current_user.leads
     num = 0
-    qtd = 0
+    qtm = 0
     if dnw:
-        qtd = dnw.qtd
+        qtm = dnw.qtm
         num = dnw.qtd + leads
         asc = Asc.query.filter(Asc.id.between('0', num))
     else:
@@ -34,7 +34,7 @@ def movim():
 
     dno = Download.query.filter_by(cliente=current_user.id).order_by(Download.data.desc())
 
-    return render_template("movim.html", asc=asc, download=dno, num=num, data=json.dumps(qtd))
+    return render_template("movim.html", asc=asc, download=dno, num=num, data=json.dumps(qtm))
 
 
 @views.route('/download')
@@ -45,11 +45,15 @@ def download():
     dnw = Download.query.filter_by(cliente=idc).order_by(Download.id.desc()).first()
     if dnw:
         num = dnw.qtd + leads
-        asc = Asc.query.filter(Asc.id.between(dnw.qtd, num))
-        dnr = Download(cliente=idc, data=datetime.now())
+        qtm = dnw.qtm
+        if dnw.desc == False:
+            dnr = Download(cliente=idc, data=datetime.now(), qtd=num, qtm=num, desc=True)
+        else:
+            dnr = Download(cliente=idc, data=datetime.now(),qtm=num)
+        asc = Asc.query.filter(Asc.id.between(qtm, num))
     else:
         asc = Asc.query.filter(Asc.id.between('0', leads))
-        dnr = Download(cliente=idc, data=datetime.now())
+        dnr = Download(cliente=idc, data=datetime.now(), qtm=leads, desc=True)
 
     # Fazer download do arquivo em csv
     with open('exportar.csv', 'w', newline='') as csvfile:
@@ -60,7 +64,9 @@ def download():
 
     db.session.add(dnr)
     db.session.commit()
-    return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True, cache_timeout=0)
+    return send_file('exportar.csv', mimetype='text/csv', attachment_filename='exportar.csv', as_attachment=True,
+                     cache_timeout=0)
+
 
 @views.route('/mudmes')
 @login_required
@@ -71,6 +77,7 @@ def mudmes():
         usr = User.query.filter_by(id=idcli).first()
         if usr:
             i.qtd = i.qtd + usr.leads
+            i.desc = False
     db.session.commit()
     return redirect(url_for('views.movim'))
 
