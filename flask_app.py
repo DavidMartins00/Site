@@ -39,12 +39,11 @@ from models import User
 if not path.exists('site/' + DB_NAME):
     db.create_all(app=app)
 
-
 #####################
 # Timer para mudar os a quantidade de arquivos que o cliente pode baixar
 # (Não funciona)
-#import timer
-#timer.start()
+# import timer
+# timer.start()
 #####################
 
 # Login Manager

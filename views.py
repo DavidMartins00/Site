@@ -6,7 +6,16 @@ from flask_login import login_required, current_user
 from models import Asc, Easc, Variavel, Download, User
 from flask_app import db
 from perms import roles
-import pandas as pd
+
+# Load csv for Modin with Dask
+import os
+
+os.environ["MODIN_ENGINE"] = "dask"  # Modin will use Dask
+
+from distributed import Client
+
+client = Client(memory_limit='8GB')
+import modin.pandas as dask_pd
 
 views = Blueprint('views', __name__)
 
@@ -49,7 +58,7 @@ def download():
         if dnw.desc == False:
             dnr = Download(cliente=idc, data=datetime.now(), qtd=num, qtm=num, desc=True)
         else:
-            dnr = Download(cliente=idc, data=datetime.now(),qtm=num)
+            dnr = Download(cliente=idc, data=datetime.now(), qtm=num)
         asc = Asc.query.filter(Asc.id.between(qtm, num))
     else:
         asc = Asc.query.filter(Asc.id.between('0', leads))
@@ -98,10 +107,11 @@ def associacao():
         nome = request.form.get('nome')
         email = request.form.get('email')
         tele = request.form.get('tele')
+        pais = request.form.get('pais')
         # Adicionar na bd
         if nome == "" or email == "" or tele == "":
             ecount += 1
-            elin = Easc(nome=nome, email=email, tele=tele)
+            elin = Easc(nome=nome, email=email, tele=tele,pais=pais)
             db.session.add(elin)
             db.session.commit()
             flash("Associação incompleta adicionada a tabela de erros", category="error")
@@ -131,19 +141,22 @@ def uploadcsv():
         # CVS Column Names
         col_names = ['nome', 'email', 'telefone']
         # Use Pandas to parse the CSV file
-        csvData = pd.read_csv(file, names=col_names, header=None, decimal=",", keep_default_na=False)
+
+        csvData = dask_pd.read_csv(file, names=col_names, header=None, decimal=",", keep_default_na=False)
+        # df = csvData[0].str.split(',', expand=True)
+        # csvData = read_csv_in_chunks(file, 5001)
         # Loop through the Rows
         for i, row in csvData.iterrows():
             if row[2] == "email" or row[2] == "Email" or row[2] == "EMAIL":
                 pass
-            elif row[0] == "" or row[1] == "" or row[2] == "":
+            elif row[0] == "" or row[1] == "" or row[2] == "" or row[3] == "":
                 ecount += 1
-                elin = Easc(nome=row[0], email=row[2], tele=row[1])
+                elin = Easc(nome=row[0], email=row[2], tele=row[1], pais=row[3])
                 db.session.add(elin)
                 db.session.commit()
             else:
                 count += 1
-                lin = Asc(nome=row[0], email=row[2], tele=row[1])
+                lin = Asc(nome=row[0], email=row[2], tele=row[1], pais=row[3])
                 db.session.add(lin)
                 db.session.commit()
             var.count = count

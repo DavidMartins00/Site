@@ -64,6 +64,8 @@ class Asc(db.Model):
     nome = db.Column(db.String(150))
     email = db.Column(db.String(150))
     tele = db.Column(db.Integer)
+    pais = db.Column(db.String(150))
+
 
 
 class Easc(db.Model):
@@ -71,6 +73,8 @@ class Easc(db.Model):
     nome = db.Column(db.String(150), nullable=True)
     email = db.Column(db.String(150), nullable=True)
     tele = db.Column(db.Integer, nullable=True)
+    pais = db.Column(db.String(150))
+
 
 
 class Log(db.Model):
