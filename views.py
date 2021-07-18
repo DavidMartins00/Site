@@ -1,14 +1,15 @@
 import csv
 import json
-from datetime import datetime
-from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file
-from flask_login import login_required, current_user
-from models import Asc, Easc, Variavel, Download, User
-from flask_app import db
-from perms import roles
-
-# Load csv for Modin with Dask
 import os
+import time
+from datetime import datetime
+
+from flask import Blueprint, render_template, request, flash, url_for, redirect, send_file, Response
+from flask_login import login_required, current_user
+
+from flask_app import db
+from models import Asc, Easc, Variavel, Download, User
+from perms import roles
 
 os.environ["MODIN_ENGINE"] = "dask"  # Modin will use Dask
 
@@ -111,13 +112,13 @@ def associacao():
         # Adicionar na bd
         if nome == "" or email == "" or tele == "":
             ecount += 1
-            elin = Easc(nome=nome, email=email, tele=tele,pais=pais)
+            elin = Easc(nome=nome, email=email, tele=tele, pais=pais)
             db.session.add(elin)
             db.session.commit()
             flash("Associação incompleta adicionada a tabela de erros", category="error")
         else:
             count += 1
-            mov = Asc(nome=nome, email=email, tele=tele)
+            mov = Asc(nome=nome, email=email, tele=tele, pais=pais)
             db.session.add(mov)
             db.session.commit()
             flash("Associação Adicionada", category="success")
@@ -139,17 +140,16 @@ def uploadcsv():
         count = 0
         file = request.files['file']
         # CVS Column Names
-        col_names = ['nome', 'email', 'telefone']
+        col_names = ['nome', 'email', 'telefone', 'pais']
         # Use Pandas to parse the CSV file
 
         csvData = dask_pd.read_csv(file, names=col_names, header=None, decimal=",", keep_default_na=False)
+        print("Leu CSV")
         # df = csvData[0].str.split(',', expand=True)
         # csvData = read_csv_in_chunks(file, 5001)
         # Loop through the Rows
         for i, row in csvData.iterrows():
-            if row[2] == "email" or row[2] == "Email" or row[2] == "EMAIL":
-                pass
-            elif row[0] == "" or row[1] == "" or row[2] == "" or row[3] == "":
+            if row[0] == "" or row[1] == "" or row[2] == "" or row[3] == "":
                 ecount += 1
                 elin = Easc(nome=row[0], email=row[2], tele=row[1], pais=row[3])
                 db.session.add(elin)
@@ -161,11 +161,22 @@ def uploadcsv():
                 db.session.commit()
             var.count = count
             var.ecount = ecount
-            db.session.commit()
-        return redirect(url_for('views.associacao'))
-    else:
-        flash("Erro no ficheiro", "error")
+            print("Acabou for")
+    # db.session.commit()
+    return redirect(url_for('views.associacao'))
 
+
+@views.route('/progress')
+def progress():
+    def generate():
+        x = 0
+
+        while x <= 100:
+            yield "data:" + str(x) + "nn"
+            x = x + 10
+            time.sleep(0.5)
+
+    return Response(generate(), mimetype="text/event-stream")
 
 @views.route('/asc/<int:id>/update', methods=['GET', 'POST'])
 @login_required
