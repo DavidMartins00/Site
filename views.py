@@ -25,6 +25,11 @@ views = Blueprint('views', __name__)
 @views.route('/dashboard')
 @login_required
 def dashboard():
+    return render_template("dashboardold.html", user=current_user)
+
+@views.route('/teste')
+@login_required
+def dashboardd():
     return render_template("dashboard.html", user=current_user)
 
 

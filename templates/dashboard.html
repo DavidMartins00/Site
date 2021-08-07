@@ -1,90 +1,113 @@
-{% extends "base.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
-    <div class="container h-100">
-        <div class="row h-100" style="display: flex; flex-wrap: wrap">
-            <div class="col-4" style="background-color: dimgray;">
-                <div class="d-grid col-3 gap-3 mx-auto">
-                    <br>
-                    {% if not user.role == "Cliente" %}
-                        <div class="btn-group">
+<!doctype html>
+<html lang="en">
 
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">Administrativo
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/users">Cadastro Usuario</a></li>
-                                <li><a class="dropdown-item" href="/empresas">Cadastro Empresa</a></li>
-                                <li><a class="dropdown-item" href="/produtos">Cadastro Produto</a></li>
-                                <li><a class="dropdown-item" href="/campanhas">Cadastro Campanha</a></li>
-                                <li><a class="dropdown-item" href="/cliente">Cadastro Cliente</a></li>
-                                <li><a class="dropdown-item" href="/associacao">Associação</a></li>
-                            </ul>
-                        </div>
-                    {% endif %}
+<head>
+    <title>Hello, world!</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!--     Fonts and icons     -->
+
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- Material Kit CSS -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <link href="{{ url_for('static', filename='material-dashboard.css') }}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="wrapper ">
+    <div class="sidebar" data-color="purple" data-background-color="white">
+        <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+        <div class="logo">
+            <a href="#" class="simple-text logo-normal">
+                IETTTO
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li class="nav-item active  ">
                     {% if not user.role == "Cliente" %}
-                        <button disabled type="button" class="btn btn-primary">Gerente</button>
-                        <button disabled type="button" class="btn btn-primary">Supervisor</button>
+                        <div class="nav-link btn-group">
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Administrativo
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/users">Cadastro Usuario</a>
+                                <a class="dropdown-item" href="/empresas">Cadastro Empresa</a>
+                                <a class="dropdown-item" href="/produtos">Cadastro Produto</a>
+                                <a class="dropdown-item" href="/campanhas">Cadastro Campanha</a>
+                                <a class="dropdown-item" href="/cliente">Cadastro Cliente</a>
+                                <a class="dropdown-item" href="/associacao">Associação</a>
+                            </div>
+                        </div>
+                        </li>
                     {% endif %}
-                    <a href="/movimentacao" class="btn btn-primary">Movimentação</a>
-                    <button disabled type="button" class="btn btn-primary">Suporte</button>
-                    <a href="/logout" class="btn btn-danger">Encerrar dia</a>
+                {% if not user.role == "Cliente" %}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link btn btn-info btn-lg disabled" role="button"
+                           aria-disabled="true">Gerente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link btn btn-info btn-lg disabled" role="button"
+                           aria-disabled="true">Supervisor</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a href="/movimentacao" class="nav-link btn btn-info btn-lg" role="button"
+                       aria-disabled="true">Movimentação</a>
+                </li>
+                <li class="nav-item">
+                    <a disabled href="#" class="nav-link btn btn-info btn-lg disabled" role="button"
+                       aria-disabled="true">Suporte</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link btn btn-danger btn-lg" role="button" aria-disabled="true">Encerrar
+                        dia</a>
+                </li>
+                <!-- your sidebar here -->
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <a class="navbar-brand" href="javascript:;">Dashboard</a>
                 </div>
-                <div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <p>{{ user.role }}:</p>
-                            <p>{{ user.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p id="date">Data</p>
-                            <p id="clock">Horas</p>
-                        </div>
-                        <div class="col">
-                            <p id="tmplog">Tempo logado</p>
-                        </div>
-                    </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <p class="nav-link">Olá {{ user.role }}: {{ user.name }}</p>
+                        </li>
+                        <!-- your navbar here -->
+                    </ul>
                 </div>
             </div>
-
-            <div class="container-fluid col-8">
-                <img class="logo" style="max-width:50%;height: auto" src="{{ url_for('static', filename='logo.png') }}"
-                     alt="">
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="container-fluid">
+                <!-- your content here -->
             </div>
         </div>
     </div>
-    <script>
+</div>
+</body>
 
-
-        n = new Date();
-        y = n.getFullYear();
-        m = n.getMonth() + 1;
-        d = n.getDate();
-        document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
-
-        var clockElement = document.getElementById("clock");
-
-        function updateClock(clock) {
-            clock.innerHTML = new Date().toLocaleTimeString();
-        }
-
-        setInterval(function () {
-            updateClock(clockElement);
-        }, 1000);
-
-        (function () {
-
-            var clockElement = document.getElementById("clock");
-
-            function updateClock(clock) {
-                clock.innerHTML = new Date().toLocaleTimeString();
-            }
-
-            setInterval(function () {
-                updateClock(clockElement);
-            }, 1000);
-
-        }());
-    </script>
-{% endblock %}
+</html>
